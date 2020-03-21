@@ -11,7 +11,7 @@ then you must copy and use the overide class BBCodeParser.php
 - import the class in your controller ```use App\Custom\BBCodeParser;```
 - use it to filter your BBCode to HTML ```(new BBCodeParser)->parse($myvar)```
 
-If you wan't to add something you propose au merge i'll check it.
+If you wan't to add something you can propose a PR i'll check it.
 
 I added few things :
 - mailto support
