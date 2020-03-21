@@ -26,6 +26,8 @@ I use this CKEDITOR config
             extraPlugins: 'bbcode,smiley,font,colorbutton,justify',
             // Remove unused plugins.
             removePlugins: 'bidi,dialogadvtab,div,flash,format,forms,horizontalrule,iframe,liststyle,pagebreak,showborders,stylescombo,table,tableselection,tabletools,templates',
+            // Width and height are not supported in the BBCode format, so object resizing is disabled.
+            disableObjectResizing: true,
             fontSize_sizes: "9/xx-small;10/x-small;13/small;16/medium;18/large;24/x-large;32/xx-large;",
             toolbar: [
                 [ 'Source', '-', 'Save', 'NewPage', '-', 'Undo', 'Redo' ],
