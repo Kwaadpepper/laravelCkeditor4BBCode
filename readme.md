@@ -1,4 +1,5 @@
-**Laravel BBcode Parser and CKEditor 4 BBcode PLugin
+Laravel BBcode Parser and CKEditor 4 BBcode PLugin
+=================================================
 
 You shall install two things :
 
@@ -10,7 +11,7 @@ then you must copy and use the overide class BBCodeParser.php
 - import the class in your controller ```use App\Custom\BBCodeParser;```
 - use it to filter your BBCode to HTML ```(new BBCodeParser)->parse($myvar)```
 
-If you wan't to add something you propose au merge i'll check it.
+If you wan't to add something you can propose a PR i'll check it.
 
 I added few things :
 - mailto support
@@ -27,7 +28,6 @@ I use this CKEDITOR config
             removePlugins: 'bidi,dialogadvtab,div,flash,format,forms,horizontalrule,iframe,liststyle,pagebreak,showborders,stylescombo,table,tableselection,tabletools,templates',
             // Width and height are not supported in the BBCode format, so object resizing is disabled.
             disableObjectResizing: true,
-            // Define font sizes in percent values.
             fontSize_sizes: "9/xx-small;10/x-small;13/small;16/medium;18/large;24/x-large;32/xx-large;",
             toolbar: [
                 [ 'Source', '-', 'Save', 'NewPage', '-', 'Undo', 'Redo' ],
