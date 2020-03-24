@@ -4,9 +4,9 @@
  */
 
 (function() {
-  const bbcodeMap = {'b': 'strong', 'u': 'u', 'i': 'em', 's': 's', 'color': 'span', 'size': 'span', 'left': 'div', 'right': 'div', 'center': 'div', 'justify': 'div', 'quote': 'blockquote', 'code': 'code', 'url': 'a', 'email': 'span', 'img': 'span', '*': 'li', 'list': 'ol'};
+  const bbcodeMap = {'b': 'strong', 'u': 'u', 'i': 'em', 's': 's', 'color': 'span', 'size': 'span', 'left': 'div', 'right': 'div', 'center': 'div', 'justify': 'div', 'quote': 'blockquote', 'code': 'code', 'url': 'a', 'email': 'span', 'img': 'span', '*': 'li', 'olist': 'ol', 'list': 'ul'};
   const convertMap = {strong: 'b', b: 'b', u: 'u', em: 'i', i: 'i', s: 's', code: 'code', li: '*'};
-  const tagnameMap = {strong: 'b', em: 'i', u: 'u', s: 's', li: '*', ul: 'list', ol: 'list', code: 'code', a: 'link', img: 'img', blockquote: 'quote'};
+  const tagnameMap = {strong: 'b', em: 'i', u: 'u', s: 's', li: '*', ul: 'list', ol: 'olist', code: 'code', a: 'link', img: 'img', blockquote: 'quote'};
   const stylesMap = {color: 'color', size: 'font-size', left: 'text-align', center: 'text-align', right: 'text-align', justify: 'text-align'};
   const attributesMap = {url: 'href', email: 'mailhref', quote: 'cite', list: 'listType'};
   const imageAttributes = ['alt', 'title', 'class', 'longdesc', 'id'];
@@ -134,7 +134,7 @@
           }
 
           if ( optionPart ) {
-            if ( part == 'list' ) {
+            if ( part == 'list' || part == 'olist' ) {
               if ( !isNaN( optionPart ) ) {
                 optionPart = 'decimal';
               } else if ( /^[a-z]+$/.test( optionPart ) ) {
@@ -458,6 +458,7 @@
 
       // List and list item.
       this.setRules( 'list', {breakBeforeOpen: 1, breakAfterOpen: 1, breakBeforeClose: 1, breakAfterClose: 1} );
+      this.setRules( 'olist', {breakBeforeOpen: 1, breakAfterOpen: 1, breakBeforeClose: 1, breakAfterClose: 1} );
 
       this.setRules( '*', {
         breakBeforeOpen: 1,
@@ -658,13 +659,24 @@
               delete element.attributes.bbcode;
             }
           },
-          ol: function( element ) {
+          ul: function( element ) {
             if ( element.attributes.listType ) {
               if ( element.attributes.listType != 'decimal' ) {
                 element.attributes.style = 'list-style-type:' + element.attributes.listType;
               }
             } else {
               element.name = 'ul';
+            }
+
+            delete element.attributes.listType;
+          },
+          ol: function(element) {
+            if ( element.attributes.listType ) {
+              if ( element.attributes.listType != 'decimal' ) {
+                element.attributes.style = 'list-style-type:' + element.attributes.listType;
+              }
+            } else {
+              element.name = 'ol';
             }
 
             delete element.attributes.listType;
@@ -712,7 +724,7 @@
                   tagName = 'size';
                 }
               }
-            } else if ( tagName == 'ol' || tagName == 'ul' ) {
+            } else if (tagName == 'ol' || tagName == 'ul') {
               if ( ( value = style['list-style-type'] ) ) {
                 switch ( value ) {
                   case 'lower-alpha':
@@ -723,10 +735,11 @@
                     break;
                 }
               } else if ( tagName == 'ol' ) {
-                value = 1;
+                tagName = 'olist';
               }
-
-              tagName = 'list';
+              if (tagName == 'ul') {
+                tagName = 'list';
+              }
             } else if ( tagName == 'blockquote' ) {
               try {
                 const cite = element.children[0];
@@ -872,8 +885,6 @@
   CKEDITOR.buffer4 = '';
   const replaceByEmoji = function(buffer, editor, config) {
     const description = smileyReverseMap[buffer];
-    // console.log(config.smiley_descriptions);
-    // console.log(description);
     const image = config.smiley_images[CKEDITOR.tools.indexOf( config.smiley_descriptions, description )];
     const src = CKEDITOR.tools.htmlEncode(config.smiley_path + image);
 
